@@ -1,54 +1,7 @@
-<!DOCTYPE html>
-<html lang="eng-us">
-<head>
-    <meta charset="UTF-8">
-    <title>Marvel API Test</title>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-</head>
-
-<body>
-    <form>
-        <input type="text" placeholder = "Search a character" id="character-input">
-        <button type="button" id="sub-button">Submit</button>
-    </form>
-    <div>
-        <img src="Images/marvel_loader.gif" id="loader-img">
-    </div>
-    <div>
-        <img src="Images/spidershrug_edit.jpg" alt="No Results Found" id="noResults">
-    </div>
-   
-    <h1 id="name-div"></h1>
-    <div id="description-div"></div>
-    <div id="thumbnail-div"></div>
-    <div id="comics-div"></div>
-
-    <table class="table">
-        <thead>
-            <tr>
-              <th scope="col">Cover</th>
-              <th scope="col">Title</th>
-              <th scope="col">Description</th>
-              <th scope="col">Page Count</th>
-              <th scope="col">Release Date</th>
-            </tr>
-        </thead>
-        <tbody id="table-body">
-            <td><span id="comic-thumb"></span></td>
-            <td><span id="comic-title"></span></td>
-            <td><span id="comic-desc"></span></td>
-            <td><span id="comic-pages"></span></td>
-            <td><span id="comic-release"></span></td>
-        </tbody>
-    </table>
-
-<script>
 $(document).ready(function(){ 
     $("#loader-img").hide()
     $("#noResults").hide()
+    $("#comic-table").hide()
 
     $("#sub-button").on("click", function(event){
         console.log("click received")
@@ -77,12 +30,14 @@ $(document).ready(function(){
             if (response.data.total === 0){
                 console.log("no results")
                  $("#loader-img").hide()
+                 $("#comic-table").hide()
                  $("#noResults").show()
                  return false
             }
           
             $("#noResults").hide()
             $("#loader-img").hide()
+            $("#comic-table").show()
             //grab relevant data
             var description = response.data.results[0].description
 
@@ -167,6 +122,3 @@ $(document).ready(function(){
     })//sub button end
     
 })//document ready end
-</script>
-</body>
-</html>
