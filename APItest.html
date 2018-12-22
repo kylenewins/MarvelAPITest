@@ -14,6 +14,13 @@
         <input type="text" placeholder = "Search a character" id="character-input">
         <button type="button" id="sub-button">Submit</button>
     </form>
+    <div>
+        <img src="Images/marvel_loader.gif" id="loader-img">
+    </div>
+    <div>
+        <img src="Images/spidershrug_edit.jpg" alt="No Results Found" id="noResults">
+    </div>
+   
     <h1 id="name-div"></h1>
     <div id="description-div"></div>
     <div id="thumbnail-div"></div>
@@ -38,11 +45,18 @@
         </tbody>
     </table>
 
-<script>      
+<script>
+$(document).ready(function(){ 
+    $("#loader-img").hide()
+    $("#noResults").hide()
+
     $("#sub-button").on("click", function(event){
         console.log("click received")
 
         event.preventDefault()
+
+        $("#loader-img").show()
+        $("#noResults").hide()
 
         $("#description-div").empty()
         $("#thumbnail-div").empty()
@@ -58,7 +72,18 @@
             url: queryUrl,
             method: "GET"
         }).then(function(response){
-        //grab relevant data
+            console.log(queryUrl)
+
+            if (response.data.total === 0){
+                console.log("no results")
+                 $("#loader-img").hide()
+                 $("#noResults").show()
+                 return false
+            }
+          
+            $("#noResults").hide()
+            $("#loader-img").hide()
+            //grab relevant data
             var description = response.data.results[0].description
 
             var name = response.data.results[0].name
@@ -67,8 +92,8 @@
             var thumbnailExt = ".jpg"
 
             console.log(response)
-            
-        //seperate nested ajax call to grab relevant comics
+
+            //seperate nested ajax call to grab relevant comics
             var characterID = response.data.results[0].id
             var comicsUrl = "https://gateway.marvel.com:443/v1/public/characters/" + characterID + "/comics?limit=10&ts=1&apikey=f8f6b1e652ea6b5406fc0494dc8babca&hash=1aaf11cbe07314e2d1ea51a9f6bd342c"
             $.ajax({
@@ -125,7 +150,7 @@
                 } 
             })
 
-        //create new displays
+            //create new displays
             $("#description-div").text(JSON.stringify(description))
 
             $("#name-div").text(JSON.stringify(name))
@@ -136,10 +161,12 @@
             thumbnail.attr("alt", "character picture")
             
             $("#thumbnail-div").append(thumbnail)
-            
-        })
 
-    })
+        })//initial ajax end
+
+    })//sub button end
+    
+})//document ready end
 </script>
 </body>
 </html>
